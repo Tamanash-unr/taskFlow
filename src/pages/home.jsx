@@ -1,27 +1,50 @@
 import { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom' 
+import { useDispatch, useSelector } from 'react-redux'
 
-import { Task } from '../components'
+import { Task, UpcomingTasks } from '../components'
+import { getTasks } from '../lib/Firebase/firebase'
+import { updateTasks } from '../lib/Redux/appSlice'
+import toast from 'react-hot-toast'
 
 const Home = () => {
   const user = useSelector((state) => state.app.user)
+  const tasks = useSelector((state) => state.app.tasks)
+
   const [isMobile, setIsMobile] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if(!user){
       navigate('/sign-in')
     }
 
+    // getTasks()
+    // console.log(tasks)
+
     if(document.body.clientWidth < 750){
       setIsMobile(true)
     }
   }, [])
 
+  const fetchTasks = async () => {
+    try {
+      const result = await getTasks();
+
+      if(result.status){
+        dispatch(updateTasks(result.data))
+      } else {
+        throw new Error(result.message)
+      }
+    } catch (error) {
+        return toast.error(error.message)
+    }
+  }
+
   return (
-    <div className='flex flex-col my-6 mx-auto w-full md:w-[80%] border-2 border-solid'>
+    <div className='flex flex-col my-6 mx-auto w-full md:w-[80%] '>
       <div className='flex items-center w-full'>
         <div className='w-12 h-12 md:w-14 md:h-14 flex items-center justify-center ml-2'>
           <img src="/assets/note.png" />
@@ -64,21 +87,26 @@ const Home = () => {
         }
       </div>
 
-      <div className='flex flex-col mx-4 mt-8'>
-        <div className='flex justify-between'>
+      <UpcomingTasks tasks={tasks}/>
+
+      <div className='flex flex-col mx-4 mt-10'>
+        <div className='flex justify-between mx-8'>
           <p className='text-2xl poppins-semibold'>
             All Tasks
           </p>
-          <button className='text-regular poppins-regular active:opacity-50'>
+          <button className='text-regular poppins-regular active:opacity-50' onClick={() => fetchTasks()}>
             <i className="fa-solid fa-filter mx-1" />
             Filter
           </button>
         </div>
         <div className='mx-auto grid grid-cols-2'>
-          <Task />
-          <Task />
-          <Task />
-          <Task />
+          {
+            tasks ?
+            tasks.allTasks.map((task) => (
+              <Task data={task} key={task.id} containerStyle="min-w-[250px] md:min-w-[700px]" />
+            )) :
+            <></>
+          }
         </div>
       </div>  
     </div>

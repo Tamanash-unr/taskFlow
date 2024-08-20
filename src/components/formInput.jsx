@@ -18,7 +18,8 @@ function FormInput({ title, isPassword, value, placeholder, type, handleChangeTe
             value={value} 
             placeholder={placeholder}
             className={`h-[50px] rounded-lg p-4 my-2 border-solid border-2 border-[#282a30] focus:border-transparent ${inputStyle}`}
-            onChange={handleChangeText} 
+            onChange={handleChangeText}
+            required 
         />
         {
             isPassword && 
