@@ -84,9 +84,9 @@ const SignIn = () => {
         >
           Sign In
         </button>
-        <p className='text-center mt-2 poppins-regular text-sm md:text-base'>
+        <div className='text-center mt-2 poppins-regular text-sm md:text-base'>
           Don't have an account? <Link to='/sign-up' className='text-blue-500 text-sm md:text-lg'>Sign Up</Link>
-        </p>
+        </div>
       </div>
     </div>
   )

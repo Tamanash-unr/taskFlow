@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { Task, UpcomingTasks } from '../components'
-import { getTasks } from '../lib/Firebase/firebase'
+import { fetchTasks } from '../lib/helper'
 import { updateTasks } from '../lib/Redux/appSlice'
-import toast from 'react-hot-toast'
+
+import { generateUID } from '../lib/helper'
 
 const Home = () => {
   const user = useSelector((state) => state.app.user)
@@ -21,25 +22,18 @@ const Home = () => {
       navigate('/sign-in')
     }
 
-    // getTasks()
-    // console.log(tasks)
+    handleFetchTasks()
 
     if(document.body.clientWidth < 750){
       setIsMobile(true)
     }
   }, [])
 
-  const fetchTasks = async () => {
-    try {
-      const result = await getTasks();
+  const handleFetchTasks = async () => {
+    const data = await fetchTasks()
 
-      if(result.status){
-        dispatch(updateTasks(result.data))
-      } else {
-        throw new Error(result.message)
-      }
-    } catch (error) {
-        return toast.error(error.message)
+    if(data){
+      dispatch(updateTasks(data))
     }
   }
 
@@ -64,14 +58,14 @@ const Home = () => {
               <i className="fa-solid fa-rectangle-list mr-2 text-xl"/>
               Create New Task
             </button>
-            <button className='flex p-3 hover:bg-gradient-to-r from-cyan-500 to-blue-500 hover:text-white poppins-regular rounded-lg items-center'>
-              <i class="fa-solid fa-right-from-bracket mr-2 text-xl" />
+            <button className='flex p-3 hover:bg-gradient-to-r from-cyan-500 to-blue-500 hover:text-white poppins-regular rounded-lg items-center' onClick={() => console.log(generateUID())}>
+              <i className="fa-solid fa-right-from-bracket mr-2 text-xl" />
               Sign Out
             </button>
           </> :
           <div className='ml-auto mr-4 relative'>
             <button className='active:opacity-50'>
-              <i class="fa-solid fa-bars text-2xl"></i>
+              <i className="fa-solid fa-bars text-2xl"></i>
             </button>
             <div className='flex flex-col absolute right-0 w-64 z-10 bg-white border-2 border-solid rounded-xl'>
               <button className='flex p-3 hover:bg-gradient-to-r from-cyan-500 to-blue-500 hover:text-white poppins-regular rounded-lg items-center'>
@@ -79,7 +73,7 @@ const Home = () => {
                 Create New Task
               </button>
               <button className='flex p-3 hover:bg-gradient-to-r from-cyan-500 to-blue-500 hover:text-white poppins-regular rounded-lg items-center'>
-                <i class="fa-solid fa-right-from-bracket mr-2 text-xl" />
+                <i className="fa-solid fa-right-from-bracket mr-2 text-xl" />
                 Sign Out
               </button>
             </div>
@@ -94,7 +88,7 @@ const Home = () => {
           <p className='text-2xl poppins-semibold'>
             All Tasks
           </p>
-          <button className='text-regular poppins-regular active:opacity-50' onClick={() => fetchTasks()}>
+          <button className='text-regular poppins-regular active:opacity-50' onClick={() => handleFetchTasks()}>
             <i className="fa-solid fa-filter mx-1" />
             Filter
           </button>

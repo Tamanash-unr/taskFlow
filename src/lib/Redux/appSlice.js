@@ -8,8 +8,9 @@ const initialState = {
         todo: true,
         inProgress: true,
         completed: true
-    }
+    },
 }
+
 
 export const appSlice = createSlice({
     name: 'app',
@@ -25,7 +26,7 @@ export const appSlice = createSlice({
         },
         updateTasks: (state, action) => {
             state.tasks = action.payload
-        }
+        },
     }
 })
 

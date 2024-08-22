@@ -16,9 +16,9 @@ const Task = ({ data, containerStyle, hideMenu }) => {
   }
 
   const taskStatus = {
-    in_progress: <div className='text-amber-500'><i class="fa-regular fa-clock" /> In Progress</div>,
-    completed: <div className='text-green-400'><i class="fa-solid fa-check" /> Completed</div>,
-    not_started: <div className='text-sky-500'><i class="fa-solid fa-hourglass" /> Not Started</div>,
+    in_progress: <div className='text-amber-500'><i className="fa-regular fa-clock" /> In Progress</div>,
+    completed: <div className='text-green-400'><i className="fa-solid fa-check" /> Completed</div>,
+    not_started: <div className='text-sky-500'><i className="fa-solid fa-hourglass" /> Not Started</div>,
   }
     
   return (
@@ -32,7 +32,7 @@ const Task = ({ data, containerStyle, hideMenu }) => {
             </p>
             {   
                 !hideMenu ?
-                <div class="active:opacity-50 relative cursor-pointer" onClick={() => setShowOptions(!showOptions)}>
+                <div className="active:opacity-50 relative cursor-pointer" onClick={() => setShowOptions(!showOptions)}>
                     <i className='fa-solid fa-ellipsis-vertical text-xl '/>
                     <div className={`flex flex-col absolute text-base min-w-[150px] z-10 bg-white right-0 border-2 border-solid rounded-lg poppins-regular origin-top-right transition ease-in-out ${showOptions ? 'scale-1' : 'scale-0'}`}>
                         <CustomButton title="Update Status" textStyle="p-2" doOnClick={updateOption}/>
@@ -51,13 +51,13 @@ const Task = ({ data, containerStyle, hideMenu }) => {
             <p>
                 { date }
             </p>
-            <p>
+            <div>
                 { taskStatus[data.status] }
-            </p>
+            </div>
         </div>
 
         {
-            showUpdateTask && <UpdateTask onClose={setShowUpdateTask} task={data}/>
+            showUpdateTask && <UpdateTask onClose={setShowUpdateTask} task={data} />
         }    
     </div>
   )

@@ -106,9 +106,9 @@ const SignUp = () => {
         >
           Create Account
         </button>
-        <p className='text-center mt-2 poppins-regular text-sm md:text-base'>
+        <div className='text-center mt-2 poppins-regular text-sm md:text-base'>
           Already have an account? <Link to='/sign-in' className='text-blue-500 text-sm md:text-lg'>Sign In</Link>
-        </p>
+        </div>
       </div>
     </div>
   )

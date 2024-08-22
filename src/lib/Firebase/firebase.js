@@ -1,5 +1,5 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { query, collection, where, getDocs, Timestamp } from "firebase/firestore";
+import { query, collection, where, getDoc, updateDoc, doc, Timestamp } from "firebase/firestore";
 
 import { auth, db } from './firebaseConfig'
 
@@ -59,16 +59,23 @@ export const getTasks = async () => {
     }
 
     try {
-        const myQuery = query(
-            collection(db, "tasks"),
-            where("user_Id", "==", auth.currentUser.uid)
-        )
-    
-        const querySnapshot = await getDocs(myQuery)
+        const docRef = doc(db, "tasks", auth.currentUser.uid)
+        const docSnapshot = await getDoc(docRef);
+
+        if(!docSnapshot.exists()){
+            return 
+        }
+
+        const data = docSnapshot.data()
+
+        // Store Firebase Timestamp as string to avoid Non-Serializable errors in Redux
+        data.allTasks.forEach((task) => {
+            task.completionDate = task.completionDate.toDate().toString()
+        })
     
         return {
             status: true,
-            data: querySnapshot.docs[0].data()
+            data: data,
         }
     } catch (error) {
         return {
@@ -76,4 +83,67 @@ export const getTasks = async () => {
             message: error.message
         }
     }    
+}
+
+export const updateTask = async (id, updateData) => {
+    if(!auth.currentUser){
+        return {
+            status: false,
+            message: "Invalid User Data"
+        }
+    }
+
+    try {
+        const docRef = doc(db, "tasks", auth.currentUser.uid)
+        const docSnapshot = await getDoc(docRef);
+
+        if(!docSnapshot.exists()){
+            return 
+        }
+
+        const data = docSnapshot.data()
+
+        const updatedTask = {...updateData, id: id, completionDate: Timestamp.fromDate(new Date(updateData.completionDate))}
+
+        data.allTasks.forEach((task, index) => {
+            if(task.id === id){
+                data.allTasks[index] = updatedTask
+            }   
+        })
+
+        // console.log(data)
+        await updateDoc(docRef, {
+            allTasks: data.allTasks
+        })
+
+        return {
+            status: true,
+            message: "Task Updated Succesfully!"
+        }
+    } catch (error) {
+        console.log("Update Error: ", error)
+
+        return {
+            status: false,
+            message: error.message
+        }
+    }
+}
+
+export const createTask = async () => {
+    if(!auth.currentUser){
+        return {
+            status: false,
+            message: "Invalid User Data"
+        }
+    }
+
+    try {
+        
+    } catch (error) {
+        return {
+            status: false,
+            message: error.message
+        }
+    }
 }

@@ -1,7 +1,7 @@
 import { useState } from "react"
 import { useDispatch } from "react-redux"
 
-import { getJSDate, fetchTasks } from "../lib/helper"
+import { fetchTasks } from "../lib/helper"
 import { updateTask } from "../lib/Firebase/firebase"
 import { setLoading, updateTasks } from "../lib/Redux/appSlice"
 
@@ -9,13 +9,13 @@ import FormInput from "./formInput"
 import CustomButton from "./customButton"
 import toast from 'react-hot-toast'
 
-const UpdateTask = ({ task, onClose }) => {
+const CreateTask = ({ onClose }) => {
 
     const [updateForm, setUpdateForm] = useState({
-        title: task.title,
-        description: task.description,
-        status: task.status,
-        completionDate: getJSDate(task.completionDate)
+        title: '',
+        description: '',
+        status: '',
+        completionDate: ''
     })
 
     const dispatch = useDispatch()
@@ -109,4 +109,4 @@ const UpdateTask = ({ task, onClose }) => {
     )
 }
 
-export default UpdateTask
+export default CreateTask
