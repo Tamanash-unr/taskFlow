@@ -1,18 +1,43 @@
 import { useState } from 'react'
+import { useDispatch } from 'react-redux';
+import toast from 'react-hot-toast';
 
-import { getFormattedDate } from '../lib/helper';
+import { getFormattedDate, fetchTasks } from '../lib/helper';
+import { deleteTask } from '../lib/Firebase/firebase';
+import { updateTasks } from '../lib/Redux/appSlice';
 import CustomButton from './customButton';
 import UpdateTask from './updateTask';
 
 const Task = ({ data, containerStyle, hideMenu }) => { 
   const [showOptions, setShowOptions] = useState(false)
   const [showUpdateTask, setShowUpdateTask] = useState(false)
-
+  const dispatch = useDispatch()
   const date = getFormattedDate(data.completionDate)
 
   const updateOption = () => {
     setShowOptions(false)
     setShowUpdateTask(true)
+  }
+
+  const handleDeleteTask = async () => {
+    const toastId = toast.loading("Deleting Task ...")
+
+    try {
+        setShowOptions(false)
+        const result = await deleteTask(data)
+        if(!result) return
+
+        if(result.status) {
+            const data = await fetchTasks();
+            if(data) { dispatch(updateTasks(data)) }
+
+            toast.success("Task Deleted!", { id: toastId })
+        } else {
+            throw new Error(result.message)
+        }
+    } catch (error) {
+        toast.error(error.message, { id: toastId })
+    }
   }
 
   const taskStatus = {
@@ -36,7 +61,7 @@ const Task = ({ data, containerStyle, hideMenu }) => {
                     <i className='fa-solid fa-ellipsis-vertical text-xl '/>
                     <div className={`flex flex-col absolute text-base min-w-[150px] z-10 bg-white right-0 border-2 border-solid rounded-lg poppins-regular origin-top-right transition ease-in-out ${showOptions ? 'scale-1' : 'scale-0'}`}>
                         <CustomButton title="Update Status" textStyle="p-2" doOnClick={updateOption}/>
-                        <CustomButton title="Delete Task" iconStyle="fa-regular fa-trash-can mx-1" textStyle="p-2 text-red-600" />
+                        <CustomButton title="Delete Task" iconStyle="fa-regular fa-trash-can mx-1" textStyle="p-2 text-red-600" doOnClick={handleDeleteTask} />
                     </div>
                 </div>:
                 <></>

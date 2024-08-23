@@ -19,6 +19,8 @@ export const appSlice = createSlice({
         updateUser: (state, action) => {
             if(action.payload.uid){
                 state.user = action.payload
+            } else {
+                state.user = null
             }
         },
         setLoading: (state, action) => {

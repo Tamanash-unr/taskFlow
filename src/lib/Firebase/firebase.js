@@ -1,7 +1,8 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { query, collection, where, getDoc, updateDoc, doc, Timestamp } from "firebase/firestore";
+import { getDoc, updateDoc, doc, Timestamp, setDoc, arrayUnion, arrayRemove } from "firebase/firestore";
 
 import { auth, db } from './firebaseConfig'
+import { generateUID } from '../helper'
 
 export const createUser = async (formData) => {
     try {
@@ -47,7 +48,18 @@ export const userSignIn = async (formData) => {
 }
 
 export const userSignOut = async () => {
-    await auth.signOut()
+    try {
+        await auth.signOut()
+
+        return {
+            status: true
+        }
+    } catch (error) {
+        return {
+            status: false,
+            message: error.message
+        }
+    }
 }
 
 export const getTasks = async () => {
@@ -130,7 +142,7 @@ export const updateTask = async (id, updateData) => {
     }
 }
 
-export const createTask = async () => {
+export const createTask = async (taskData) => {
     if(!auth.currentUser){
         return {
             status: false,
@@ -139,7 +151,56 @@ export const createTask = async () => {
     }
 
     try {
+        const docRef = doc(db, "tasks", auth.currentUser.uid)
+        const docSnapshot = await getDoc(docRef);
+
+        taskData.completionDate = Timestamp.fromDate(new Date(taskData.completionDate))
+        taskData.id = generateUID()
+
+        if(!docSnapshot.exists()){
+            await setDoc(docRef, {
+                allTasks: [taskData],
+            })
+        } else {
+            await updateDoc(docRef, {
+                allTasks: arrayUnion(taskData)
+            })
+        }
+
+        // console.log(taskData)
+
+        return {
+            status: true
+        }
+    } catch (error) {
+        return {
+            status: false,
+            message: error.message
+        }
+    }
+}
+
+export const deleteTask = async (task) => {
+    if(!auth.currentUser){
+        return {
+            status: false,
+            message: "Invalid User Data"
+        }
+    }
+
+    try {
+        const docRef = doc(db, "tasks", auth.currentUser.uid)
         
+        const data = {...task}
+        data.completionDate = Timestamp.fromDate(new Date(data.completionDate))
+
+        await updateDoc(docRef, {
+            allTasks: arrayRemove(data),
+        })
+
+        return {
+            status: true
+        }
     } catch (error) {
         return {
             status: false,

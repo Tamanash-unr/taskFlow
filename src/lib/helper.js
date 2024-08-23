@@ -83,6 +83,7 @@ export const generateUID = () => {
 export const fetchTasks = async () => {
     try {
         const result = await getTasks();
+        if(!result) return
 
         if(result.status){
             return result.data

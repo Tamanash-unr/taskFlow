@@ -1,19 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-    createTask: false
+    createTaskUI: false
 }
 
 export const uiSlice = createSlice({
     name: 'ui',
     initialState,
     reducers: {
-        setCreateTask: (state, action) => {
-            state.createTask = action.payload
+        toggleCreateTask: (state, action) => {
+            state.createTaskUI = action.payload
         }
     }
 })
 
-export const { setCreateTask } = uiSlice.actions
+export const { toggleCreateTask } = uiSlice.actions
 
 export default uiSlice.reducer

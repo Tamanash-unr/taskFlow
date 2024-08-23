@@ -28,6 +28,7 @@ const SignIn = () => {
       }
 
       const result = await userSignIn(form);
+      if(!result) return
 
       if(result.status){
         toast.success('Signed In Successfully!', { id: signInToast })

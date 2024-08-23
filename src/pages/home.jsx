@@ -2,15 +2,18 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom' 
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Task, UpcomingTasks } from '../components'
+import { Task, UpcomingTasks, CreateTask } from '../components'
 import { fetchTasks } from '../lib/helper'
-import { updateTasks } from '../lib/Redux/appSlice'
+import { updateTasks, updateUser } from '../lib/Redux/appSlice'
+import { toggleCreateTask } from '../lib/Redux/uiSlice'
 
-import { generateUID } from '../lib/helper'
+import { userSignOut } from '../lib/Firebase/firebase'
+import toast from 'react-hot-toast'
 
 const Home = () => {
   const user = useSelector((state) => state.app.user)
   const tasks = useSelector((state) => state.app.tasks)
+  const createTaskUI = useSelector((state) => state.ui.createTaskUI)
 
   const [isMobile, setIsMobile] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
@@ -20,6 +23,7 @@ const Home = () => {
   useEffect(() => {
     if(!user){
       navigate('/sign-in')
+      return
     }
 
     handleFetchTasks()
@@ -27,13 +31,32 @@ const Home = () => {
     if(document.body.clientWidth < 750){
       setIsMobile(true)
     }
-  }, [])
+  }, [user])
 
   const handleFetchTasks = async () => {
     const data = await fetchTasks()
 
     if(data){
       dispatch(updateTasks(data))
+    }
+  }
+
+  const handleSignOut = async () => {
+    const toastId = toast.loading('Signing out...')
+
+    try {
+      const result = await userSignOut();
+      if(!result) return
+
+      if(result.status){
+        dispatch(updateUser({}))
+
+        toast.success('Signed out successfully', { id: toastId })
+      } else {
+        throw new Error(result.message)
+      }
+    } catch (error) {
+      toast.error(error.message, { id: toastId })
     }
   }
 
@@ -54,11 +77,17 @@ const Home = () => {
         {
           !isMobile ? 
           <>
-            <button className='flex ml-auto p-3 hover:bg-gradient-to-r from-cyan-500 to-blue-500 hover:text-white poppins-regular rounded-lg items-center'>
+            <button 
+              className='flex ml-auto p-3 hover:bg-gradient-to-r from-cyan-500 to-blue-500 hover:text-white poppins-regular rounded-lg items-center'
+              onClick={() => dispatch(toggleCreateTask(true))}
+            >
               <i className="fa-solid fa-rectangle-list mr-2 text-xl"/>
               Create New Task
             </button>
-            <button className='flex p-3 hover:bg-gradient-to-r from-cyan-500 to-blue-500 hover:text-white poppins-regular rounded-lg items-center' onClick={() => console.log(generateUID())}>
+            <button 
+              className='flex p-3 hover:bg-gradient-to-r from-cyan-500 to-blue-500 hover:text-white poppins-regular rounded-lg items-center' 
+              onClick={() => handleSignOut()}
+            >
               <i className="fa-solid fa-right-from-bracket mr-2 text-xl" />
               Sign Out
             </button>
@@ -102,7 +131,11 @@ const Home = () => {
             <></>
           }
         </div>
-      </div>  
+      </div> 
+      {
+        createTaskUI && 
+        <CreateTask />
+      } 
     </div>
   )
 }

@@ -34,6 +34,7 @@ const SignUp = () => {
       }
 
       const result = await createUser(form)
+      if(!result) return
 
       if(result.status){
         toast.success("User Created Successfully!", { id: signUpToast })
