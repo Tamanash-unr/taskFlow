@@ -4,11 +4,6 @@ const initialState = {
     user: null,
     loading: false,
     tasks: null,
-    filter: {
-        todo: true,
-        inProgress: true,
-        completed: true
-    },
 }
 
 

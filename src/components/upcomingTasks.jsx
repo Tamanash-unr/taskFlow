@@ -11,7 +11,7 @@ const UpcomingTasks = ({ tasks }) => {
                 tasks ?
                 tasks.allTasks.map((task) => {
                     if(task.status !== 'completed') {
-                        return <Task data={task} key={task.id} containerStyle="w-[550px]" hideMenu={true} />
+                        return <Task data={task} key={task.id} containerStyle="min-w-[310px] md:w-[550px]" hideMenu={true} />
                     }    
                 }) :
                 <></>

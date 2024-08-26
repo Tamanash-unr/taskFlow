@@ -57,7 +57,7 @@ const UpdateTask = ({ task, onClose }) => {
             onTransitionEnd={() => { if(!showAnim) onClose(false) }}
         >
             <div className="h-full w-full blur-2xl bg-black opacity-50 fixed"/>
-            <div className="relative z-10 rounded-lg bg-white border-2 border-solid m-auto min-w-[500px] p-4">
+            <div className="relative z-10 rounded-lg bg-white border-2 border-solid m-auto min-w-[90%] md:min-w-[500px] p-4">
                 <div className="flex justify-between poppins-semibold text-xl">
                     <p>Update Task</p>
                     <button 
@@ -77,10 +77,9 @@ const UpdateTask = ({ task, onClose }) => {
                         <p className='poppins-semibold'>Task Description</p>
                         <textarea 
                             rows="4" 
-                            cols="50" 
                             onChange={(evt) => setUpdateForm({...updateForm, description: evt.target.value})} 
                             value={updateForm.description}
-                            className="border-2 border-solid border-black p-2 rounded-lg my-2 resize-none focus:border-white"
+                            className="border-2 border-solid border-black p-2 w-full rounded-lg my-2 resize-none focus:border-white"
                             style={{scrollbarWidth: "thin" }}
                             required 
                         />
