@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+    isMobile: false,
     createTaskUI: false,
     taskFilter: "all_tasks"
 }
@@ -15,9 +16,12 @@ export const uiSlice = createSlice({
         setFilter: (state, action) => {
             state.taskFilter = action.payload
         },
+        setIsMobile: (state, action) => {
+            state.isMobile = action.payload
+        }
     }
 })
 
-export const { toggleCreateTask, setFilter } = uiSlice.actions
+export const { toggleCreateTask, setFilter, setIsMobile } = uiSlice.actions
 
 export default uiSlice.reducer

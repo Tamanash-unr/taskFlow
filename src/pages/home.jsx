@@ -6,17 +6,16 @@ import toast from 'react-hot-toast'
 import { Task, UpcomingTasks, CreateTask } from '../components'
 import { fetchTasks } from '../lib/helper'
 import { updateTasks, updateUser } from '../lib/Redux/appSlice'
-import { toggleCreateTask, setFilter } from '../lib/Redux/uiSlice'
+import { toggleCreateTask, setFilter, setIsMobile } from '../lib/Redux/uiSlice'
 import { userSignOut } from '../lib/Firebase/firebase'
 
-import { DropdownMenu } from '../components'
+import { DropdownMenu, EmptyComponent } from '../components'
 
 const Home = () => {
   const user = useSelector((state) => state.app.user)
   const tasks = useSelector((state) => state.app.tasks)
-  const { createTaskUI, taskFilter } = useSelector((state) => state.ui)
+  const { createTaskUI, taskFilter, isMobile } = useSelector((state) => state.ui)
 
-  const [isMobile, setIsMobile] = useState(false)
   const [showMenu, setShowMenu] = useState(false)
   const [showFilter, setShowFilter] = useState(false)
   const navigate = useNavigate();
@@ -31,9 +30,9 @@ const Home = () => {
     handleFetchTasks()
 
     if(document.body.clientWidth < 750){
-      setIsMobile(true)
+      dispatch(setIsMobile(true))
     }
-  }, [user])
+  }, [user, dispatch])
 
   const handleFetchTasks = async () => {
     const data = await fetchTasks()
@@ -104,22 +103,15 @@ const Home = () => {
             <button className='active:opacity-50' onClick={() => setShowMenu(!showMenu)}>
               <i className="fa-solid fa-bars text-2xl"></i>
             </button>
-            <div className={`flex flex-col absolute right-0 w-64 z-10 bg-white border-2 border-solid rounded-xl ${ showMenu ? 'scale-1' : 'scale-0'}`}>
-              <button 
-                className='flex p-3 active:bg-gradient-to-r from-cyan-500 to-blue-500 active:text-white poppins-regular rounded-lg items-center'
-                onClick={() => dispatch(toggleCreateTask(true))}
-              >
-                <i className="fa-solid fa-rectangle-list mr-2 text-xl"/>
-                Create New Task
-              </button>
-              <button 
-                className='flex p-3 active:bg-gradient-to-r from-cyan-500 to-blue-500 active:text-white poppins-regular rounded-lg items-center'
-                onClick={() => handleSignOut()}
-              >
-                <i className="fa-solid fa-right-from-bracket mr-2 text-xl" />
-                Sign Out
-              </button>
-            </div>
+            <DropdownMenu 
+              id={user ? user.uid : ''} 
+              options={[
+                { title: "Create New Task", iconStyle: "fa-solid fa-rectangle-list mr-2 text-lg", textStyle: "p-3 text-sm", buttonStyle: "w-full flex justify-start", doOnClick: () => {dispatch(toggleCreateTask(true)); setShowMenu(!showMenu);} },
+                { title: "Sign Out", iconStyle: "fa-solid fa-right-from-bracket mr-2 text-lg", textStyle: "p-3 text-sm", buttonStyle: "w-full flex justify-start", doOnClick: () => handleSignOut() },
+              ]}
+              visible={showMenu}
+              menuStyle="min-w-[180px]"
+            />
           </div>
         }
       </div>
@@ -148,15 +140,22 @@ const Home = () => {
             />
           </div>
         </div>
-        <div className='mx-auto grid md:grid-cols-2'>
+        <div className={`mx-auto ${tasks && tasks.allTasks.length > 0 ? 'grid md:grid-cols-2' : ''}`}>
           {
-            tasks ?
+            tasks && tasks.allTasks.length > 0 ?
             tasks.allTasks.map((task) => {
               if(taskFilter === 'all_tasks' || taskFilter === task.status){
-                return <Task data={task} key={task.id} containerStyle="min-w-[250px] md:min-w-[700px]" />
+                return <Task data={task} key={task.id} containerStyle="min-w-[320px] md:min-w-[700px]" />
               }
             }) :
-            <></>
+            <EmptyComponent 
+                title="You have no Tasks"
+                titleStyle="text-gray-400 poppins-semibold text-lg"
+                subtitle="Create a task from the menu."
+                subtitleStyle="text-gray-400 poppins-regular"
+                iconStyle="fa-regular fa-clipboard text-[60px] text-gray-400"
+                containerStyle="m-0 mt-12"
+            />
           }
         </div>
       </div> 

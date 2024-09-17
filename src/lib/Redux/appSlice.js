@@ -6,7 +6,6 @@ const initialState = {
     tasks: null,
 }
 
-
 export const appSlice = createSlice({
     name: 'app',
     initialState,

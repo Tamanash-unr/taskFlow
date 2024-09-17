@@ -1,5 +1,5 @@
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "firebase/auth";
-import { getDoc, updateDoc, doc, Timestamp, setDoc, arrayUnion, arrayRemove } from "firebase/firestore";
+import { getDoc, updateDoc, doc, Timestamp, setDoc, orderBy, arrayUnion, arrayRemove, query } from "firebase/firestore";
 
 import { auth, db } from './firebaseConfig'
 import { generateUID } from '../helper'

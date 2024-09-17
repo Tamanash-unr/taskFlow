@@ -50,7 +50,7 @@ const Task = ({ data, containerStyle, hideMenu }) => {
     const completion = new Date(data.completionDate)
     const today = new Date()
 
-    if(today > completion) {
+    if(today > completion && data.status !== "completed") {
         setIsOverdue(true)
     } 
   }
