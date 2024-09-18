@@ -17,13 +17,15 @@ const UpcomingTasks = ({ tasks, taskToDisplay = 6 }) => {
     const taskContainerRef = useRef();
 
     useEffect(() => {
+        var maxScrollLeft = taskContainerRef.current.scrollWidth - taskContainerRef.current.clientWidth;
+
         if(scrollValue > 0){
             setScrollLeft(true)
         } else {
             setScrollLeft(false)
         }
 
-        if(scrollValue >= taskContainerRef.current.scrollLeftMax){
+        if(scrollValue >= maxScrollLeft){
             setScrollRight(false)
         } else {
             setScrollRight(true)

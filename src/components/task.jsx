@@ -66,7 +66,7 @@ const Task = ({ data, containerStyle, hideMenu }) => {
         className={`mx-2 my-4 border-2 border-solid min-h-[80px] rounded-xl shadow-[15px_32px_30px_-15px_rgba(0,0,0,0.3)] p-3 ${ containerStyle }`}
         onMouseLeave={() => setShowOptions(false)} 
     >
-        <div className='flex justify-between h-[20%]'>
+        <div className='flex justify-between h-[25%]'>
             <p className='text-lg md:text-xl poppins-semibold text-ellipsis line-clamp-1 w-[80%]'>
                 { data.title }
             </p>
@@ -74,10 +74,6 @@ const Task = ({ data, containerStyle, hideMenu }) => {
                 !hideMenu ?
                 <div className="active:opacity-50 relative cursor-pointer" onClick={() => setShowOptions(!showOptions)}>
                     <i className='fa-solid fa-ellipsis-vertical text-lg md:text-xl '/>
-                    {/* <div className={`flex flex-col absolute text-base min-w-[150px] z-10 bg-white right-0 border-2 border-solid rounded-lg poppins-regular origin-top-right transition ease-in-out ${showOptions ? 'scale-1' : 'scale-0'}`}>
-                        <CustomButton title="Update Status" textStyle="p-2" doOnClick={updateOption}/>
-                        <CustomButton title="Delete Task" iconStyle="fa-regular fa-trash-can mx-1" textStyle="p-2 text-red-600" doOnClick={handleDeleteTask} />
-                    </div> */}
                     <DropdownMenu
                         id={data.id} 
                         options={[
