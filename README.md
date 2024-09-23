@@ -1,6 +1,12 @@
 ## 📝 About
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Taskflow is a sleek task management application designed to streamline your productivity. With intuitive features like customizable task lists, deadline reminders, and collaborative tools, Taskflow helps you stay organized and focused on what matters most. Whether you’re managing personal projects or team assignments, Taskflow makes it easy to prioritize and track your progress in real time.
+
+## ⚙️ Tech Stack
+
+- React
+- Tailwind CSS
+- Firebase
 
 ## 💻 Screenshots
 ![taskflow_mobile](https://github.com/user-attachments/assets/c24760af-6220-4f27-b5d0-5cae8795a158)
@@ -9,39 +15,48 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ![taskflow_2](https://github.com/user-attachments/assets/60c9cba2-2fed-4df4-83f3-498ea9b7e61c)
 
-## Available Scripts
+## :computer: Quick Start
 
-In the project directory, you can run:
+Follow these steps to set up the project locally on your machine.
 
-### `npm start`
+**Prerequisites**
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+Make sure you have the following installed on your machine:
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- [Git](https://git-scm.com/)
+- [Node.js](https://nodejs.org/en)
+- [npm](https://www.npmjs.com/) (Node Package Manager)
 
-### `npm test`
+**Cloning the Repository**
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```bash
+git clone https://github.com/Tamanash-unr/taskFlow.git
+cd taskFlow
+```
+**Installation**
 
-### `npm run build`
+Install the project dependencies using npm:
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```bash
+npm install
+```
+**Setup Environment Variables**
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Create Environment variables for setting up and connecting to Firebase.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+REACT_APP_FIREBASE_API_KEY = /*Your Firebase API Key*/
+REACT_APP_FIREBASE_AUTH_DOMAIN = /*Your Firebase Auth Domain*/
+REACT_APP_FIREBASE_PROJECT_ID = /*Your Firebase Project ID*/
+REACT_APP_FIREBASE_STORAGE_BUCKET = /*Your Firebase Project Bucket ID*/
+REACT_APP_FIREBASE_MESSAGING_SENDER_ID = /*Your Firebase Messaging Sender ID*/
+REACT_APP_FIREBASE_APP_ID = /*Your Firebase App ID*/
+```
 
-### `npm run eject`
+**Running the Project**
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+```bash
+npm run start
+```
+## 🔗 Links
+:globe_with_meridians: **Web Demo :** https://taskflow-gkrj.onrender.com
